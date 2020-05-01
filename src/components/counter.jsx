@@ -19,6 +19,13 @@ class Counter extends Component {
         >
           +
         </button>
+        <button
+          className="btn btn-danger"
+          onClick={() => this.props.onDelete(this.props.data)}
+          style={{ height: 36, marginLeft: 15 }}
+        >
+          Delete
+        </button>
       </div>
     );
   }

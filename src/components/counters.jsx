@@ -13,29 +13,50 @@ class Counters extends Component {
     ],
     itemCount: 0,
   };
-  render() {
-    const handleDecrement = (data) => {
-      let { counter, itemCount } = this.state;
-      const index = counter.indexOf(data);
-      if (counter[index].count > 0) {
-        counter[index].count--;
-        let count = counter[index].count;
-        if (count === 0) {
-          itemCount--;
-        }
-      }
-      this.setState({ itemCount: itemCount, counter: counter });
-    };
-    const handleIncrement = (data) => {
-      let { counter, itemCount } = this.state;
-      const index = counter.indexOf(data);
+
+  handleDecrement = (data) => {
+    let { counter, itemCount } = this.state;
+    const index = counter.indexOf(data);
+    if (counter[index].count > 0) {
+      counter[index].count--;
       let count = counter[index].count;
       if (count === 0) {
-        itemCount++;
+        itemCount--;
       }
-      counter[index].count++;
-      this.setState({ itemCount: itemCount, counter: counter });
-    };
+    }
+    this.setState({ itemCount: itemCount, counter: counter });
+  };
+
+  handleIncrement = (data) => {
+    let { counter, itemCount } = this.state;
+    const index = counter.indexOf(data);
+    let count = counter[index].count;
+    if (count === 0) {
+      itemCount++;
+    }
+    counter[index].count++;
+    this.setState({ itemCount: itemCount, counter: counter });
+  };
+
+  handleDelete = (data) => {
+    let { counter, itemCount } = this.state; //object disrtucting
+    counter = counter.filter((c) => c.id !== data.id);
+    if (data.count > 0) {
+      itemCount--;
+    }
+    this.setState({ counter, itemCount });
+  };
+
+  handleReset = () => {
+    let { counter, itemCount } = this.state;
+    itemCount = 0;
+    for (let i = 0; i < counter.length; i++) {
+      counter[i].count = 0;
+    }
+    this.setState({ counter, itemCount });
+  };
+
+  render() {
     return (
       <div>
         <nav
@@ -50,12 +71,18 @@ class Counters extends Component {
             {this.state.itemCount}
           </span>
         </nav>
+        <div className="row m-4">
+          <button className="btn btn-dark" onClick={this.handleReset}>
+            Reset
+          </button>
+        </div>
         {this.state.counter.map((c) => (
           <Counter
             key={c.id}
             data={c}
-            handleIncrement={handleIncrement}
-            handleDecrement={handleDecrement}
+            handleIncrement={this.handleIncrement}
+            handleDecrement={this.handleDecrement}
+            onDelete={this.handleDelete}
           />
         ))}
       </div>
